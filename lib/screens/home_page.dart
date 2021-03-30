@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:grocery_app/core/models/products_model.dart';
+import 'package:grocery_app/core/services/api_service.dart';
 import 'package:grocery_app/screens/detail_page.dart';
 import 'package:grocery_app/ui/helpers/media_query_helper.dart';
 import 'package:grocery_app/ui/styles/color_style.dart';
@@ -13,6 +15,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //ApiServisten verileri alalım
+  ApiService service = ApiService.getInstance();
+
+  //Servisten gelen dataları bu listte tutacağız.
+  List<Product> productList = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,58 +35,14 @@ class _HomePageState extends State<HomePage> {
 
           SizedBox(height: 10),
 
+          //Ürün Sayfasının başlığı
           bodyTitleWidget(
               mainTitle: 'Taze', subTitle: 'Meyveler'), //Yukarıya al bunları.
+
           SizedBox(height: 40),
 
           //Ürünlerin Bulduğu Kart
-          Container(
-            height: displayHeight(context) * 0.77,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(75.0)),
-            ),
-            child: ListView(
-              padding: EdgeInsets.only(left: 25, right: 20, top: 4),
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: Container(
-                    height: displayHeight(context) * .65,
-                    child: ListView(
-                      children: [
-                        _buildProductItem(
-                            productImg: 'assets/images/food1.jpeg',
-                            productName: 'Muz',
-                            productPrice: 12.00,
-                            productDetail: 'Muz Cart Curt Lorem İpsum'),
-                        _buildProductItem(
-                            productImg: 'assets/images/food2.jpeg',
-                            productName: 'Çilek',
-                            productPrice: 8.50,
-                            productDetail: 'Çilek Cart Curt Lorem İpsum'),
-                        _buildProductItem(
-                            productImg: 'assets/images/food3.jpeg',
-                            productName: 'Armut',
-                            productPrice: 5.50,
-                            productDetail: 'Armut Cart Curt Lorem İpsum'),
-                        _buildProductItem(
-                            productImg: 'assets/images/food4.jpeg',
-                            productName: 'Nat',
-                            productPrice: 8.00,
-                            productDetail: 'Nar Cart Curt Lorem İpsum'),
-                        _buildProductItem(
-                            productImg: 'assets/images/food5.jpeg',
-                            productName: 'Limon',
-                            productPrice: 7.50,
-                            productDetail: 'Limon Cart Curt Lorem İpsum'),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          _bodyContainerWidget(dataWidget: showDataBuilder()),
         ],
       ),
     );
@@ -117,7 +81,19 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  //Body Ürün
+  Widget _bodyContainerWidget({@required Widget dataWidget}) {
+    return Container(
+      padding: EdgeInsets.only(left: 25, right: 20, top: 4),
+      height: displayHeight(context) * 0.77,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(75.0)),
+      ),
+      child: dataWidget, //showDataBuilder()
+    );
+  }
+
+  //Ürün Kalıp Tasarım Widgetı
   Widget _buildProductItem(
       {String productImg,
       String productName,
@@ -127,13 +103,16 @@ class _HomePageState extends State<HomePage> {
       padding: EdgeInsets.only(left: 10, right: 10, top: 5),
       child: InkWell(
         onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
+          Navigator.of(context).push(
+            MaterialPageRoute(
               builder: (context) => DetailPage(
-                    productImg: productImg,
-                    productName: productName,
-                    productPrice: productPrice,
-                    productDetail: productDetail,
-                  )));
+                productImg: productImg,
+                productName: productName,
+                productPrice: productPrice,
+                productDetail: productDetail,
+              ),
+            ),
+          );
         }, //NAVİGATE EKLENECEK
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -144,7 +123,9 @@ class _HomePageState extends State<HomePage> {
                   Hero(
                     tag: productImg,
                     child: Image(
-                        image: AssetImage(productImg),
+                        //Local datadan resim göstermek istersek => AssetImage(productImg),
+
+                        image: NetworkImage(productImg),
                         fit: BoxFit.cover,
                         height: 90,
                         width: 90),
@@ -186,6 +167,39 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+    );
+  }
+
+  //Ürün Kalıplarını kullanarak gelen tüm dataları listele
+  Widget _listProduct() {
+    return ListView.builder(
+        itemCount: productList.length,
+        itemBuilder: (context, index) {
+          return _buildProductItem(
+              productImg: productList[index].imageUrl,
+              productName: productList[index].name,
+              productPrice: productList[index].money.toDouble(),
+              productDetail: 'Muz Cart Curt Lorem İpsum');
+        });
+  }
+
+  //Ürünleri Göster
+  Widget showDataBuilder() {
+    return FutureBuilder<List<Product>>(
+      future: service.getProducts(),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          //Diğer case durumları da eklenecek !
+          case ConnectionState.done:
+            if (snapshot.hasData) {
+              productList = snapshot.data;
+              return _listProduct();
+            }
+            return Center(child: Text("Bir Hata Meydana Geldi !"));
+          default:
+            return Center(child: CircularProgressIndicator());
+        }
+      },
     );
   }
 }
