@@ -1,16 +1,11 @@
-# grocery_app
+## **Flutter Grocery App**
 
-A new Flutter project.
+loading... ⏳ 🚧
 
-## Getting Started
+### Projenin Kurulumu - TR
 
-This project is a starting point for a Flutter application.
+- Proje dosyasını bir IDE'de açın.
 
-A few resources to get you started if this is your first Flutter project:
+- Projede kullanılan paketlerin dahil edilmesi için, terminal kısmına **`flutter pub get`** kodunu yazın. 
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Paketeleri indirdikten sonra da son olarakta **`flutter run`** ile projeyi çalıştırabilirsin.
