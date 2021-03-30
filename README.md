@@ -1,6 +1,16 @@
 ## **Flutter Grocery App**
 
-loading... ⏳ 🚧
+loading... ⏳
+
+📌 Detail information & project's images will be added after the project is completed. 
+
+### 📌 **ToDo List **:  
+- [] Add - Delete Product
+- [] User - Admin Login
+- [] Detail Page Edit
+- [] Introduction Screens
+- [] User Support Ticket
+
 
 ### Projenin Kurulumu - TR
 
