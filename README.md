@@ -7,7 +7,7 @@ loading... ⏳
 ### 📌 **ToDo List**:  
 - [ ] Add - Delete Product
 - [ ] User - Admin Login
-- [ ] Detail Page Edit
+- [X] Detail Page Edit
 - [ ] Introduction Screens
 - [ ] User Support Ticket
 

@@ -18,7 +18,8 @@ class ApiService {
 
   //Bu sınıftan başka bir instance oluşturulmaması için private yaptık.
   ApiService._privateConstructer() {
-    _baseUrl = "HIDDEN - YOUR DATA SOURCE LINK";
+    _baseUrl =
+        "https://grocery-app-bf234-default-rtdb.europe-west1.firebasedatabase.app/";
   }
 
   static ApiService getInstance() {

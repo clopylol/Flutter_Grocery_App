@@ -81,6 +81,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  //Ürünlerin listelendiği kart
   Widget _bodyContainerWidget({@required Widget dataWidget}) {
     return Container(
       padding: EdgeInsets.only(left: 25, right: 20, top: 4),
