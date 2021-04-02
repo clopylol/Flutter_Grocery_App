@@ -27,7 +27,8 @@ class _HomePageState extends State<HomePage> {
       extendBody: true,
       backgroundColor: colorPrimary,
       bottomNavigationBar: bottomNavigatorBarWidget(context),
-      floatingActionButton: floatingActionButtonWidget(),
+      floatingActionButton:
+          floatingActionButtonWidget(context, Icons.shopping_cart_rounded, ""),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       body: Column(
         children: [

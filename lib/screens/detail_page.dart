@@ -55,7 +55,8 @@ class _DetailPageState extends State<DetailPage> {
       backgroundColor: colorPrimary,
       appBar: appBarWidget(),
       bottomNavigationBar: bottomNavigatorBarWidget(context),
-      floatingActionButton: floatingActionButtonWidget(),
+      floatingActionButton:
+          floatingActionButtonWidget(context, Icons.shopping_cart_rounded, ""),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       body: ListView(
         children: [
@@ -70,44 +71,8 @@ class _DetailPageState extends State<DetailPage> {
               //Ürün Resmi
               productImageWidget(),
 
-              //Ürün Adı
-              Positioned(
-                top: 250,
-                left: 25,
-                right: 25,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    //Ürün Adı
-                    productNameWidget(widget.productName),
-
-                    SizedBox(height: 20),
-
-                    //Ürün Fiyat ve Adet
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        //Ürün Fiyatı
-                        productMoneyWidget(widget.productPrice),
-
-                        //Fiyat ve Adet Arasındaki Divider
-                        productVerticalDividerWidget(),
-
-                        //Ürün Adeti
-                        productCountWidget()
-                      ],
-                    ),
-
-                    SizedBox(height: 50),
-
-                    //Ürün Açıklaması Başlığı ve Ürün Açıklaması
-                    productDescriptionWidget(
-                      descriptionTitle: _descriptionTitle,
-                      description: widget.productDetail,
-                    )
-                  ],
-                ),
-              ),
+              //Ürün Adı, Fiyatı, Sayısı
+              productDetailWidget(),
             ],
           )
         ],
@@ -319,6 +284,47 @@ class _DetailPageState extends State<DetailPage> {
           child: Text('${widget.productDetail}'),
         ),
       ],
+    );
+  }
+
+  //Ürün Adı, Fiyatı, Sayısı
+  Widget productDetailWidget() {
+    return Positioned(
+      top: 250,
+      left: 25,
+      right: 25,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          //Ürün Adı
+          productNameWidget(widget.productName),
+
+          SizedBox(height: 20),
+
+          //Ürün Fiyat ve Adet
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              //Ürün Fiyatı
+              productMoneyWidget(widget.productPrice),
+
+              //Fiyat ve Adet Arasındaki Divider
+              productVerticalDividerWidget(),
+
+              //Ürün Adeti
+              productCountWidget()
+            ],
+          ),
+
+          SizedBox(height: 50),
+
+          //Ürün Açıklaması Başlığı ve Ürün Açıklaması
+          productDescriptionWidget(
+            descriptionTitle: _descriptionTitle,
+            description: widget.productDetail,
+          )
+        ],
+      ),
     );
   }
 }

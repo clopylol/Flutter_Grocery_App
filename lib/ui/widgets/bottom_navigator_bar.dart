@@ -9,7 +9,7 @@ Widget bottomNavigatorBarWidget(context) {
     child: Container(
       height: displayHeight(context) * 0.08,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           IconButton(
             iconSize: 35,
@@ -29,13 +29,14 @@ Widget bottomNavigatorBarWidget(context) {
   );
 }
 
-Widget floatingActionButtonWidget() {
+Widget floatingActionButtonWidget(
+    BuildContext context, IconData icon, String route) {
   return FloatingActionButton(
     backgroundColor: colorPrimary,
     splashColor: Colors.green[300],
-    onPressed: () {},
+    onPressed: () => Navigator.pushNamed(context, route),
     child: Icon(
-      Icons.shopping_cart_rounded,
+      icon,
       size: 25,
     ),
   );

@@ -5,7 +5,7 @@ loading... ⏳
 📌 Detail information & project's images will be added after the project is completed. 
 
 ### 📌 **ToDo List**:  
-- [ ] Add - Delete Product
+- [X] Add - Delete Product
 - [ ] User - Admin Login
 - [X] Detail Page Edit
 - [ ] Introduction Screens
