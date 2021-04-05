@@ -9,7 +9,8 @@ loading... ⏳
 - [ ] User - Admin Login
 - [X] Detail Page Edit
 - [ ] Introduction Screens
-- [ ] User Support Ticket
+- [ ] User Support Ticket 
+- [ ] Add Cart Page
 
 
 ### Projenin Kurulumu - TR

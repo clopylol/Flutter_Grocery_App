@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/screens/admin/admin_add_product_page.dart';
 import 'package:grocery_app/screens/admin/admin_page.dart';
+import 'package:grocery_app/ui/styles/color_style.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,12 +12,18 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Material App',
 
+      theme: ThemeData(
+        primaryColor: colorPrimary,
+        accentColor: colorSecondary,
+      ),
+
       //Routes Table
       routes: {
         '/': (context) => AdminPage(), //Geçerli Sayfa
         '/adminAddProduct': (context) => AdminAddProductPage(),
       },
       //Route Listimizde olmayan bir route geldiyse hata döndür.
+      //Burası için bir error page tasarımı yapılabilir.
       onUnknownRoute: (settings) => MaterialPageRoute(
         builder: (context) => Scaffold(
           appBar: AppBar(),

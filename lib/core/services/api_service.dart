@@ -52,23 +52,25 @@ class ApiService {
   //Firebase'e ürün ekle.
   Future<void> addProducts(Product product) async {
     //Post isteği atalım
-    // final jsonBody = json.encode(product.toJson());
-    // final response = await http
-    //     .post(Uri.parse("$_baseUrl/products.json", body: jsonBody));
+    final jsonBody = json.encode(product.toJson());
+    final response =
+        await http.post(Uri.parse("$_baseUrl/products.json"), body: jsonBody);
 
-    // final jsonResponse = json.decode(response.body);
+    final jsonResponse = json.decode(response.body);
 
-    // switch (response.statusCode) {
-    //   //Hata oluşmazsa. Bize map dönecek buna dikkat
-    //   case HttpStatus.ok:
-    //     return Future.value(true);
-    //   //Herhangi bir hata olursa
-    //   case HttpStatus.unauthorized:
-    //     Logger().e(jsonResponse);
-    //     break;
-    // }
-    // Logger().e(jsonResponse);
-    // return Future.error(jsonResponse);
+    switch (response.statusCode) {
+      //Hata oluşmazsa. Bize map dönecek buna dikkat
+      case HttpStatus.ok:
+        print('Ürün Başarıyla EKLENDİ !');
+        return Future.value(true);
+
+      //Herhangi bir hata olursa
+      case HttpStatus.unauthorized:
+        Logger().e(jsonResponse);
+        break;
+    }
+    Logger().e(jsonResponse);
+    return Future.error(jsonResponse);
   }
 
   //Firebase'ten ürün sil

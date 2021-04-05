@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:grocery_app/core/models/products_model.dart';
+import 'package:grocery_app/core/services/api_service.dart';
 import 'package:grocery_app/ui/styles/color_style.dart';
 import 'package:grocery_app/ui/widgets/bottom_navigator_bar.dart';
 
@@ -16,6 +18,8 @@ class _AdminAddProductPageState extends State<AdminAddProductPage> {
   TextEditingController controllerName = TextEditingController();
   TextEditingController controllerPrice = TextEditingController();
   TextEditingController controllerImageUrl = TextEditingController();
+  TextEditingController controllerDescription = TextEditingController();
+  TextEditingController controllerDiscount = TextEditingController();
 
   //TextEdittingControllerdaki String'in boş olup olmadığını kontrol için kullandık.
   String validatorStr(val) {
@@ -28,11 +32,104 @@ class _AdminAddProductPageState extends State<AdminAddProductPage> {
   //TextEdittingController'ın boş olup olmadığını ve sayi olup olmadığını kontrol için kullandık.
   String validatorInt(val) {
     if (val.isEmpty) {
-      return "Lütfen bu alanı boş bırakmayın !";
+      return "Lütfen geçerli bir fiyat girin !";
     } else if (double.tryParse(val) == null) {
-      return "Lütfen bir sayı giriniz !";
+      return "Lütfen geçerli bir fiyat girin !";
     }
     return null;
+  }
+
+  //Servisimize datalarımızı gönderelim.
+  dynamic postAddProduct() async {
+    var model = Product(
+      name: controllerName.text,
+      money: int.parse(controllerPrice.text),
+      imageUrl: controllerImageUrl.text,
+      description: controllerDescription.text,
+    );
+    await ApiService.getInstance()
+        .addProducts(model)
+        .then((value) => clearTextController());
+  }
+
+  //Datları gönderdikten sonra text controller'ları temizleyelim
+  void clearTextController() {
+    controllerName.clear();
+    controllerPrice.clear();
+    controllerImageUrl.clear();
+    controllerDescription.clear();
+    controllerDiscount.clear();
+  }
+
+  //Kullanıcı ürünü eklemek istediğe dair bir onay al.
+  //Bunu dinamik bir hale getirip widget olarak ekle.
+  //Text buttonu da dinamik yap..
+  //Style felan filan bunları da dinamik yap.
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Ürün Eklensin Mi ?"),
+          content: RichText(
+            text: TextSpan(
+              style: TextStyle(color: Colors.black, fontSize: 18),
+              children: [
+                TextSpan(
+                    text: '${controllerName.text}',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: colorPrimary)),
+                TextSpan(text: ' adlı ürün,'),
+                TextSpan(
+                    text: '${controllerPrice.text}₺ ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: colorPrimary)),
+                TextSpan(text: 'olarak mağazaya eklensin mi ?'),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text(
+                "İptal",
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: colorPrimary),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                "Ekle",
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: colorPrimary),
+              ),
+              onPressed: () {
+                postAddProduct();
+                Navigator.of(context).pop();
+                _showAlert('Ürün Başarıyla Eklendi !', 'Tamam', Colors.green);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  //Ürünün Eklendiğine Dair Kullanıcıya bir bilgi verelim.
+  _showAlert(String alertTxt, String alertButtonTxt, Color alertColor) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: alertColor,
+        content: Text('$alertTxt'),
+        duration: Duration(seconds: 2),
+        action: SnackBarAction(
+          label: '$alertButtonTxt',
+          onPressed: () {},
+        ),
+      ),
+    );
   }
 
   @override
@@ -67,12 +164,13 @@ class _AdminAddProductPageState extends State<AdminAddProductPage> {
           ),
         ],
       ),
-      bottomNavigationBar: bottomNavigatorBarWidget(context),
-      floatingActionButton:
-          floatingActionButtonWidget(context, Icons.shopping_cart_rounded, ""),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      //bottomNavigationBar: bottomNavigatorBarWidget(context),
+      // floatingActionButton:
+      //     floatingActionButtonWidget(context, Icons.shopping_cart_rounded, ""),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SingleChildScrollView(
         child: Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           key: _formKey,
           child: Center(
             child: Padding(
@@ -83,21 +181,51 @@ class _AdminAddProductPageState extends State<AdminAddProductPage> {
                   textFormWidget(
                     controller: controllerName,
                     validator: this.validatorStr,
-                    inputIcon: Icons.ac_unit_sharp,
+                    inputIcon: Icons.assignment_rounded,
                     inputText: 'Ürün Adı',
                   ),
                   textFormWidget(
                     controller: controllerPrice,
                     validator: this.validatorInt,
-                    inputIcon: Icons.ac_unit_sharp,
+                    inputIcon: Icons.attach_money_rounded,
                     inputText: 'Ürün Fiyatı',
+                    keyboardType: TextInputType.number,
                   ),
                   textFormWidget(
                     controller: controllerImageUrl,
                     validator: this.validatorStr,
-                    inputIcon: Icons.ac_unit_sharp,
+                    inputIcon: Icons.add_a_photo,
                     inputText: 'Ürün Resmi',
                   ),
+                  textFormWidget(
+                    controller: controllerDescription,
+                    validator: this.validatorStr,
+                    inputIcon: Icons.description,
+                    inputText: 'Ürün Açıklaması',
+                  ),
+
+                  //İndirim oranı ve ...
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: textFormWidget(
+                          controller: controllerDiscount,
+                          validator: this.validatorStr,
+                          inputIcon: Icons.trending_down,
+                          inputText: 'İndirim Oranı (%)',
+                          keyboardType: TextInputType.number,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: SizedBox(),
+                      ),
+                    ],
+                  ),
+
+                  //Kaydet Buttonu
+                  saveButtonWidget(buttonName: 'ÜRÜN KAYDET'),
                 ],
               ),
             ),
@@ -108,17 +236,19 @@ class _AdminAddProductPageState extends State<AdminAddProductPage> {
   }
 
 //  Kalıp Text Form Field
-  Widget textFormWidget({
-    controller,
-    validator,
-    inputIcon,
-    inputText,
-  }) {
+  Widget textFormWidget(
+      {dynamic controller,
+      dynamic validator,
+      IconData inputIcon,
+      String inputText,
+      TextInputType keyboardType}) {
     return Column(
       children: [
         TextFormField(
+          cursorColor: colorPrimary,
           controller: controller,
           validator: validator,
+          keyboardType: keyboardType,
           decoration: inputDecoration(inputIcon, inputText),
         ),
         Padding(padding: EdgeInsets.symmetric(vertical: 10))
@@ -129,11 +259,35 @@ class _AdminAddProductPageState extends State<AdminAddProductPage> {
   //Kalıp Input Decoration
   InputDecoration inputDecoration(IconData inputIcon, String inputText) {
     return InputDecoration(
-      icon: Icon(inputIcon),
+      //prefixIcon: Icon(inputIcon),
+      suffixIcon: Icon(inputIcon),
+      //icon: Icon(inputIcon),
       border: OutlineInputBorder(),
       labelText: inputText,
-      hasFloatingPlaceholder: true,
+      //hasFloatingPlaceholder: true,
       //şeylerde sıkıntı var validate
+    );
+  }
+
+  //Ürünü Kaydet buttonu
+  Widget saveButtonWidget({@required String buttonName}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: Container(
+            height: 56,
+            child: ElevatedButton(
+              onPressed: _showDialog,
+              child: Text('$buttonName'),
+              style: ElevatedButton.styleFrom(
+                primary: colorPrimary,
+                textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
