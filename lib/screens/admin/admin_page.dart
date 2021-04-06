@@ -15,11 +15,7 @@ class _AdminPageState extends State<AdminPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: colorPrimary,
-        title: Text('Yönetici Sayfası'),
-        centerTitle: true,
-      ),
+      appBar: adminPageAppBarWidget(),
       bottomNavigationBar: bottomNavigatorBarWidget(context),
       floatingActionButton:
           floatingActionButtonWidget(context, Icons.add, "/adminAddProduct"),
@@ -29,6 +25,49 @@ class _AdminPageState extends State<AdminPage> {
           size: 200,
         ),
       ),
+    );
+  }
+
+  //App Bar
+  Widget adminPageAppBarWidget() {
+    return AppBar(
+      backgroundColor: colorPrimary,
+      title: Text('Yönetici Sayfası'),
+      //centerTitle: true,
+      actions: [
+        IconButton(
+          icon: Icon(
+            Icons.delete,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pushNamed(context, '/adminShowProduct2');
+          },
+        ),
+        IconButton(
+          icon: Icon(
+            Icons.add_business,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pushNamed(context, '/adminShowProduct');
+          },
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8.0),
+          child: CircleAvatar(
+            radius: 20,
+            backgroundColor: colorSecondary,
+            child: CircleAvatar(
+              radius: 18,
+              backgroundColor: Colors.white,
+              backgroundImage: NetworkImage(
+                  'https://avatars.githubusercontent.com/u/37087597?v=4'),
+              //Login Eklenince burayı dinamik yaparız.
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
