@@ -180,7 +180,7 @@ class _AdminShowProduct2State extends State<AdminShowProduct2> {
                   actions: [
                     TextButton(
                       child: Text(
-                        "Cancel",
+                        "İPTAL",
                         style: TextStyle(color: Colors.black),
                       ),
                       onPressed: () {
@@ -189,7 +189,7 @@ class _AdminShowProduct2State extends State<AdminShowProduct2> {
                     ),
                     TextButton(
                       child: Text(
-                        "Delete",
+                        "SİL",
                         style: TextStyle(color: Colors.red),
                       ),
                       onPressed: () {

@@ -19,9 +19,11 @@ Widget bottomNavigatorBarWidget(context) {
           ),
           IconButton(
             iconSize: 35,
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.admin_panel_settings),
             color: Colors.white,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/adminPage');
+            },
           ),
         ],
       ),

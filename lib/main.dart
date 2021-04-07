@@ -3,6 +3,7 @@ import 'package:grocery_app/screens/admin/admin_add_product_page.dart';
 import 'package:grocery_app/screens/admin/admin_page.dart';
 import 'package:grocery_app/screens/admin/admin_show_product_page.dart';
 import 'package:grocery_app/screens/admin/admin_show_product_page2.dart';
+import 'package:grocery_app/screens/home_page.dart';
 import 'package:grocery_app/ui/styles/color_style.dart';
 
 void main() => runApp(MyApp());
@@ -21,7 +22,8 @@ class MyApp extends StatelessWidget {
 
       //Routes Table
       routes: {
-        '/': (context) => AdminPage(), //Geçerli Sayfa
+        '/': (context) => HomePage(), //Geçerli Sayfa
+        '/adminPage': (context) => AdminPage(),
         '/adminAddProduct': (context) => AdminAddProductPage(),
         '/adminShowProduct': (context) => AdminShowProductPage(),
         '/adminShowProduct2': (context) => AdminShowProduct2(),
